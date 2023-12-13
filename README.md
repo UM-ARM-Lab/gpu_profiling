@@ -37,4 +37,6 @@ The script clones the necessary repositories and creates a `pipenv` environment 
 
 To compare the results of your machine with others, run `python compare_results.py`.
 
+We include the profiling results of a few of our older computers for reference.
+
 However, the comparison script isn't all-encompassing so if you want fine-grained control of plotting, you may desire to make your own script or notebook.

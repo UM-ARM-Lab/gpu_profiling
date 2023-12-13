@@ -1,0 +1,3 @@
+Using device: cuda
+Training time: 13.59474
+Inference time: 11.63164
