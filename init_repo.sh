@@ -4,13 +4,20 @@ echo "Cloning benchmark repositories"
 echo "------------------------------"
 # Initializes the repository by pulling some of the GPU profiling repositories. Opted to use this
 # script instead of git submodules since those can be a bit of a headache.
-git clone https://github.com/UM-ARM-Lab/arm_segmentation.git
+if [ ! -d "arm_segmentation" ]; then
+  git clone https://github.com/UM-ARM-Lab/arm_segmentation.git
+else
+    echo "Detected arm_segmentation already cloned"
+fi
 
-git clone https://github.com/UM-ARM-Lab/pytorch_kinematics.git
+if [ ! -d "pytorch_kinematics" ]; then
+    git clone https://github.com/UM-ARM-Lab/pytorch_kinematics.git
+else
+    echo "Detected pytorch_kinematics already installed"
+fi
 
 # Currently having trouble with the MPPI autotune pip installation.
 # git clone https://github.com/UM-ARM-Lab/pytorch_mppi.git
-
 echo ""
 
 echo "Creating Python virtual environment (pipenv) file"
