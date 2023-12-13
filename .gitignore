@@ -163,6 +163,9 @@ cython_debug/
 
 ## Custom .gitignore Configuration
 ## -------------------------------
+# Generated results.
+results/
+
 # Generated plots.
 comparison_plots/
 *.png
