@@ -1,5 +1,7 @@
 from typing import Dict, List, Optional
 from pathlib import Path
+import re
+from warnings import warn
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -102,8 +104,7 @@ class GpuProfilingResultsComparison:
         print("Plotting arm-segmentation results")
         fig, ax = plt.subplots()
 
-        if rig_order is None:
-            rig_order = self.profiles.keys()
+        rig_order = self._handle_rig_order(rig_order)
 
         attrs = ["Train", "Inference"]
         num_attrs = len(attrs)
@@ -145,8 +146,7 @@ class GpuProfilingResultsComparison:
                         job_names: List[str] = ["val", "val_serial", "kuka_iiwa"]):
         """Plots results for pytorch-kinematics GPU profiling"""
         print("Plotting pytorch-kinematics results")
-        if rig_order is None:
-            rig_order = list(self.profiles.keys())
+        rig_order = self._handle_rig_order(rig_order)
 
         figs = []
         for job in job_names:
@@ -156,6 +156,28 @@ class GpuProfilingResultsComparison:
             print("\tSaved fig to:", figpath)
             figs.append(fig)
         return figs
+
+    def _handle_rig_order(self, rig_order: Optional[List[str]] = None):
+        """Picks either the given rig ordering or tries to order the rigs by GPU number"""
+        if rig_order is None:
+            rig_order = self._try_sorting_rigs()
+        return rig_order
+
+    def _try_sorting_rigs(self) -> List[str]:
+        """Tries to sort results by GPU number"""
+        warn("Attempting to intelligently sort rig names by GPU.")
+        # Wrapping this in a try/except block to handle if a GPU doesn't have a number for some
+        # reason.
+        try:
+            # Need to strip out the "_Ti" that some GPUs have in their names (hence, the regex) and
+            # convert to integers for sorting.
+            pairs = [(name, int(re.sub("[^0-9]", "", res.gpu_name)))
+                     for name, res in self.profiles.items()]
+            pairs_sorted = sorted(pairs, key=lambda x: x[1])
+            rig_order = [pair[0] for pair in pairs_sorted]
+        except:
+            rig_order = list(self.profiles.keys())
+        return rig_order
 
     def _handle_output_dir(self, output_dir: Path):
         if output_dir is None:
@@ -233,6 +255,5 @@ class GpuProfilingResultsComparison:
 if __name__ == "__main__":
     results_grouped = GpuProfilingResultsComparison(Path("./results"))
 
-    rig_order = ["armeclipse_1080_Ti", "armeclipse_4070", "legion_4090"]
-    _ = results_grouped.plot_pk_results(rig_order)
-    _ = results_grouped.plot_segmentation_results(rig_order)
+    _ = results_grouped.plot_pk_results()
+    _ = results_grouped.plot_segmentation_results()
