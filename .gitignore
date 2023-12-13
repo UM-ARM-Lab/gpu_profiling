@@ -166,3 +166,7 @@ cython_debug/
 # Generated plots.
 comparison_plots/
 *.png
+
+# pipenv files.
+Pipfile
+Pipfile.lock
