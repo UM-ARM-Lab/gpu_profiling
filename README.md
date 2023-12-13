@@ -10,7 +10,7 @@ These benchmarks require a CUDA-capable GPU, meaning a somewhat recent NVIDIA GP
 
 ## Software Dependencies
 
-The only software dependencies for running these benchmarks is Python 3 and `pipenv`. Python 3 should be on your path as `python3`. Your system installation of Python will is sufficient as the benchmarking functions handle virtual environment creation for you. Additionally, `pipenv` should be installed and on your path.
+The only software dependencies for running these benchmarks is Python 3.7+ and `pipenv`. Python 3 should be on your path as `python3`. Your system installation of Python is sufficient as the benchmarking functions handle virtual environment creation for you. Additionally, `pipenv` should be installed and on your path.
 
 If `pipenv` is not installed, install it with `python3 -m pip install pipenv`.
 
